@@ -18,6 +18,7 @@ public class ScheduledJobs {
     @Autowired
     private CoffeeShopService coffeeShopService;
 
+    //:TODO can store in redis
     public static QuadTree world = new QuadTree(new QuadTree.BoundingBox(-90, -180, 90, 180));
 
     // Runs daily at 0 AM

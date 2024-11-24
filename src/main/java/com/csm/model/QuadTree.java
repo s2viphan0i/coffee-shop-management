@@ -1,5 +1,6 @@
 package com.csm.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +11,9 @@ import java.util.List;
 public class QuadTree {
     @Getter
     public static class Point {
+        @JsonProperty("latitude")
         double x;
+        @JsonProperty("longitude")
         double y;
         Long id;
 
