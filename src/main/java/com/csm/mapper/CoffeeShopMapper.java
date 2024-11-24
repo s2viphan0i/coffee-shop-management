@@ -4,53 +4,54 @@ import com.csm.model.request.CoffeeShopCreateRequest;
 import com.csm.model.response.CoffeeShopCreateResponse;
 import com.csm.model.response.CoffeeShopGetResponse;
 import com.csm.model.response.OwnerGetResponse;
-import com.csm.repository.entity.CoffeeShop;
+import com.csm.repository.entity.CoffeeShopEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CoffeeShopMapper {
 
-    public CoffeeShop toEntity(CoffeeShopCreateRequest coffeeShopDTO) {
+    public CoffeeShopEntity toEntity(CoffeeShopCreateRequest coffeeShopDTO) {
         if (coffeeShopDTO == null) {
             return null;
         }
 
-        CoffeeShop coffeeShop = new CoffeeShop();
-        coffeeShop.setName(coffeeShopDTO.getName());
-        coffeeShop.setAddress(coffeeShopDTO.getAddress());
-        coffeeShop.setOpeningHours(coffeeShopDTO.getOpeningHours());
-        coffeeShop.setLatitude(coffeeShopDTO.getLatitude());
-        coffeeShop.setLongitude(coffeeShopDTO.getLongitude());
+        CoffeeShopEntity coffeeShopEntity = new CoffeeShopEntity();
+        coffeeShopEntity.setName(coffeeShopDTO.getName());
+        coffeeShopEntity.setAddress(coffeeShopDTO.getAddress());
+        coffeeShopEntity.setOpeningHours(coffeeShopDTO.getOpeningHours());
+        coffeeShopEntity.setLatitude(coffeeShopDTO.getLatitude());
+        coffeeShopEntity.setLongitude(coffeeShopDTO.getLongitude());
 
-        return coffeeShop;
+        return coffeeShopEntity;
     }
 
-    public CoffeeShopGetResponse toCoffeeShopGetResponse(CoffeeShop coffeeShop) {
-        if (coffeeShop == null) {
+    public CoffeeShopGetResponse toCoffeeShopGetResponse(CoffeeShopEntity coffeeShopEntity) {
+        if (coffeeShopEntity == null) {
             return null;
         }
 
         CoffeeShopGetResponse coffeeShopDTO = new CoffeeShopGetResponse();
-        coffeeShopDTO.setName(coffeeShop.getName());
-        coffeeShopDTO.setAddress(coffeeShop.getAddress());
-        coffeeShopDTO.setOpeningHours(coffeeShop.getOpeningHours());
-        coffeeShopDTO.setLatitude(coffeeShop.getLatitude());
-        coffeeShopDTO.setLongitude(coffeeShop.getLongitude());
-        coffeeShopDTO.setLongitude(coffeeShop.getLongitude());
+        coffeeShopDTO.setId(coffeeShopEntity.getId());
+        coffeeShopDTO.setName(coffeeShopEntity.getName());
+        coffeeShopDTO.setAddress(coffeeShopEntity.getAddress());
+        coffeeShopDTO.setOpeningHours(coffeeShopEntity.getOpeningHours());
+        coffeeShopDTO.setLatitude(coffeeShopEntity.getLatitude());
+        coffeeShopDTO.setLongitude(coffeeShopEntity.getLongitude());
+        coffeeShopDTO.setQueues(coffeeShopEntity.getQueues());
         OwnerGetResponse ownerDTO = new OwnerGetResponse();
-        ownerDTO.setName(coffeeShop.getOwner().getFullname());
-        ownerDTO.setPhone(coffeeShop.getOwner().getPhone());
+        ownerDTO.setName(coffeeShopEntity.getOwner().getFullname());
+        ownerDTO.setPhone(coffeeShopEntity.getOwner().getPhone());
         coffeeShopDTO.setOwner(ownerDTO);
         return coffeeShopDTO;
     }
 
-    public CoffeeShopCreateResponse toCoffeeShopCreateResponse(CoffeeShop coffeeShop) {
-        if (coffeeShop == null) {
+    public CoffeeShopCreateResponse toCoffeeShopCreateResponse(CoffeeShopEntity coffeeShopEntity) {
+        if (coffeeShopEntity == null) {
             return null;
         }
 
         CoffeeShopCreateResponse response = new CoffeeShopCreateResponse();
-        response.setId(coffeeShop.getId());
+        response.setId(coffeeShopEntity.getId());
         return response;
     }
 }

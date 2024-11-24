@@ -13,10 +13,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CoffeeShopGetResponse {
+    private Long id;
     private String name;
     private String address;
     private String openingHours;
     private Double latitude;
     private Double longitude;
+    private Integer queues;
     private OwnerGetResponse owner;
 }

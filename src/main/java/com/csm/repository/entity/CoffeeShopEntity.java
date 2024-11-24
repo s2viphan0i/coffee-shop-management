@@ -1,7 +1,6 @@
 package com.csm.repository.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +8,7 @@ import lombok.Setter;
 @Table(name = "coffee_shop")
 @Getter
 @Setter
-public class CoffeeShop extends AuditEntity {
+public class CoffeeShopEntity extends AuditEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +29,13 @@ public class CoffeeShop extends AuditEntity {
     @Column(nullable = false)
     private Double longitude;
 
+    @Column(nullable = false)
+    private Integer queues;
+
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private UserEntity owner;
+
+    @OneToOne(mappedBy = "shop", cascade = CascadeType.ALL)
+    private MenuEntity menu;
 }

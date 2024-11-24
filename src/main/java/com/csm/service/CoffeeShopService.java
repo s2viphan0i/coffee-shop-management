@@ -2,20 +2,24 @@ package com.csm.service;
 
 import com.csm.exception.BadRequestException;
 import com.csm.mapper.CoffeeShopMapper;
+import com.csm.mapper.MenuMapper;
 import com.csm.model.ResponseStatusEnum;
 import com.csm.model.request.CoffeeShopCreateRequest;
+import com.csm.model.request.MenuCreateRequest;
 import com.csm.model.response.CoffeeShopCreateResponse;
 import com.csm.model.response.CoffeeShopGetResponse;
+import com.csm.model.response.MenuGetResponse;
+import com.csm.model.response.MenuUpdateResponse;
 import com.csm.repository.CoffeeShopRepository;
-import com.csm.repository.entity.CoffeeShop;
+import com.csm.repository.MenuRepository;
+import com.csm.repository.entity.CoffeeShopEntity;
+import com.csm.repository.entity.MenuEntity;
+import com.csm.repository.entity.MenuItemEntity;
 import com.csm.repository.entity.UserEntity;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,13 +32,17 @@ public class CoffeeShopService {
     private CoffeeShopMapper coffeeShopMapper;
 
     @Autowired
-    private UserDetailsService customUserDetailsService;
+    private MenuRepository menuRepository;
+
+    @Autowired
+    private MenuMapper menuMapper;
+
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
 
     public CoffeeShopCreateResponse createCoffeeShop(CoffeeShopCreateRequest coffeeShop) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        UserEntity userEntity = (UserEntity) customUserDetailsService.loadUserByUsername(username);
-        CoffeeShop coffeeShopEntity = coffeeShopMapper.toEntity(coffeeShop);
+        UserEntity userEntity = customUserDetailsService.getCurrentUser();
+        CoffeeShopEntity coffeeShopEntity = coffeeShopMapper.toEntity(coffeeShop);
         UserEntity user = new UserEntity();
         user.setId(userEntity.getId());
         coffeeShopEntity.setOwner(user);
@@ -43,11 +51,40 @@ public class CoffeeShopService {
     }
 
     public CoffeeShopGetResponse getCoffeeShop(Long id) {
-        Optional<CoffeeShop> coffeeShopOptional = coffeeShopRepository.findById(id);
-        if (coffeeShopOptional.isEmpty()) {
-            throw new BadRequestException(ResponseStatusEnum.NOT_FOUND, "Coffee shop");
+        CoffeeShopEntity coffeeShopEntity = getCoffeeShopById(id);
+
+        return coffeeShopMapper.toCoffeeShopGetResponse(coffeeShopEntity);
+    }
+
+    public MenuUpdateResponse updateShopMenu(Long shopId, MenuCreateRequest menuCreateRequest) {
+        UserEntity userEntity = customUserDetailsService.getCurrentUser();
+        CoffeeShopEntity coffeeShopEntity = getCoffeeShopById(shopId);
+
+        if (userEntity == null || !userEntity.getId().equals(coffeeShopEntity.getOwner().getId())) {
+            throw new BadRequestException(ResponseStatusEnum.INVALID_CREDENTIAL);
         }
 
-        return coffeeShopMapper.toCoffeeShopGetResponse(coffeeShopOptional.get());
+        Optional<MenuEntity> menuEntityOptional = menuRepository.findByShopId(shopId);
+        MenuEntity menuEntity = menuEntityOptional.orElseGet(MenuEntity::new);
+
+        List<MenuItemEntity> menuItemEntities = menuCreateRequest.getItems().stream()
+                .map(menuItemDTO -> menuMapper.toEntity(menuItemDTO))
+                .toList();
+        menuEntity.setItems(menuItemEntities);
+        menuEntity.setShop(coffeeShopEntity);
+        menuEntity = menuRepository.save(menuEntity);
+        return menuMapper.toMenuUpdateResponse(menuEntity);
+    }
+
+    private CoffeeShopEntity getCoffeeShopById(Long id) {
+        Optional<CoffeeShopEntity> coffeeShopOptional = coffeeShopRepository.findById(id);
+
+        return coffeeShopOptional.orElseThrow(() -> new BadRequestException(ResponseStatusEnum.NOT_FOUND, "Coffee shop"));
+    }
+
+    public MenuGetResponse getShopMenu(Long shopId) {
+        Optional<MenuEntity> menuEntityOptional = menuRepository.findByShopId(shopId);
+        MenuEntity menuEntity = menuEntityOptional.orElseGet(MenuEntity::new);
+        return menuMapper.toDTO(menuEntity);
     }
 }

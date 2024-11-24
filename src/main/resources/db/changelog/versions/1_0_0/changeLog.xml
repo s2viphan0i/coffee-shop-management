@@ -71,4 +71,29 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="Create menu talbe" author="Spencer">
+        <createTable tableName="menu">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="shop_id" type="BIGINT">
+                <constraints nullable="false" />
+            </column>
+            <column name="items" type="JSONB">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="menu"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Add queue column" author="Spencer">
+        <addColumn tableName="coffee_shop">
+            <column name="queue" type="INTEGER" defaultValue="1">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
