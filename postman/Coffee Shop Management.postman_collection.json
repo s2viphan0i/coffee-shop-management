@@ -1,0 +1,218 @@
+{
+	"info": {
+		"_postman_id": "d1c186d0-d222-403f-8147-d35e7a679433",
+		"name": "Coffee Shop Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"spencer.nguyentruong\",\r\n    \"password\": \"thispassword\",\r\n    \"phone\": \"0972366337\",\r\n    \"address\": \"136 H Street\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"spencer.nguyentruong\",\r\n    \"password\": \"thispassword\",\r\n    \"phone\": \"0972366337\",\r\n    \"address\": \"136 H Street\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Coffee shop",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb2ZmZWUtc2hvcCIsInN1YiI6ImhhLmRvIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3MzIzODI0MDMsImV4cCI6MTczMjM4NjAwM30.RXS4tSWqbdNQxsxb-X651sir5MQmJZqL8TQMrDRSJYw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Hado Coffee\",\r\n    \"address\": \"189 VanCourver\",\r\n    \"openingHours\": \"9:00AM - 10:00PM\",\r\n    \"latitude\": 21.00042, \r\n    \"longitude\": 105.693037\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/admin/coffee-shops",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"admin",
+								"coffee-shops"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb2ZmZWUtc2hvcCIsInN1YiI6ImhhLmRvIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3MzI0MTczMzYsImV4cCI6MTczMjQyMDkzNn0.SkppzwN6Mp9KPhZfRuJv8Sg1R5_-ozHLx1_mi7DlHi4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/coffee-shops/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"coffee-shops",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Menu",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb2ZmZWUtc2hvcCIsInN1YiI6InNwZW5jZXIubmd1eWVudHJ1b25nIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3MzI0MjU0NjYsImV4cCI6MTczMjQyOTA2Nn0.D0mWmIR4HSDnEMooWM9nCHS3e8XcXU-aIs6PFDAF12c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"items\": [\r\n    {\r\n      \"name\": \"Espresso\",\r\n      \"description\": \"Strong black coffee\",\r\n      \"price\": 2.5\r\n    },\r\n    {\r\n      \"name\": \"Cappuccino\",\r\n      \"description\": \"Coffee with steamed milk\",\r\n      \"price\": 3.0\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/admin/coffee-shops/1/menu",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"admin",
+								"coffee-shops",
+								"1",
+								"menu"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get menu",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb2ZmZWUtc2hvcCIsInN1YiI6InNwZW5jZXIubmd1eWVudHJ1b25nIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3MzI0MjU0NjYsImV4cCI6MTczMjQyOTA2Nn0.D0mWmIR4HSDnEMooWM9nCHS3e8XcXU-aIs6PFDAF12c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/admin/coffee-shops/1/menu",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"admin",
+								"coffee-shops",
+								"1",
+								"menu"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
