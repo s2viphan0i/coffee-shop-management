@@ -1,5 +1,6 @@
 package com.csm.model.response;
 
+import com.csm.model.RegionEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,4 +22,5 @@ public class CoffeeShopGetResponse {
     private Double longitude;
     private Integer queues;
     private OwnerGetResponse owner;
+    private RegionEnum region;
 }

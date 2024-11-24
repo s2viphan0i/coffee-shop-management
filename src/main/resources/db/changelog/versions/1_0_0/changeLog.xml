@@ -49,6 +49,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="address" type="VARCHAR(255)"/>
+            <column name="region" type="VARCHAR(255)"/>
             <column name="opening_hours" type="VARCHAR(255)"/>
             <column name="latitude" type="DOUBLE" remarks="Latitude coordinate">
                 <constraints nullable="false"/>
@@ -71,7 +72,7 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="Create menu talbe" author="Spencer">
+    <changeSet id="Create menu table" author="Spencer">
         <createTable tableName="menu">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
@@ -96,4 +97,11 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="Create super user" author="Spencer">
+        <insert tableName="users">
+            <column name="username" value="admin" />
+            <column name="password" value="$2a$10$bY6cao5N8nTvV18YUOL5eukKjyZz63gJm7W0M4MJFuYMopD/8bSqG" />
+            <column name="role" value="ROLE_ADMIN" />
+        </insert>
+    </changeSet>
 </databaseChangeLog>

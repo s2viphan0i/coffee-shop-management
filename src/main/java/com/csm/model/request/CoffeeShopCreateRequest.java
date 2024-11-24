@@ -1,5 +1,6 @@
 package com.csm.model.request;
 
+import com.csm.model.RegionEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -23,4 +24,7 @@ public class CoffeeShopCreateRequest {
     private Double longitude;
     @JsonIgnore
     private Long ownerId;
+    private Integer queue;
+    @NotNull
+    private RegionEnum region;
 }

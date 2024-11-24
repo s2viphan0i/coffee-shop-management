@@ -21,6 +21,7 @@ public class CoffeeShopMapper {
         coffeeShopEntity.setOpeningHours(coffeeShopDTO.getOpeningHours());
         coffeeShopEntity.setLatitude(coffeeShopDTO.getLatitude());
         coffeeShopEntity.setLongitude(coffeeShopDTO.getLongitude());
+        coffeeShopEntity.setQueue(coffeeShopDTO.getQueue() != null ? coffeeShopDTO.getQueue() : 1);
 
         return coffeeShopEntity;
     }
@@ -37,7 +38,8 @@ public class CoffeeShopMapper {
         coffeeShopDTO.setOpeningHours(coffeeShopEntity.getOpeningHours());
         coffeeShopDTO.setLatitude(coffeeShopEntity.getLatitude());
         coffeeShopDTO.setLongitude(coffeeShopEntity.getLongitude());
-        coffeeShopDTO.setQueues(coffeeShopEntity.getQueues());
+        coffeeShopDTO.setQueues(coffeeShopEntity.getQueue());
+        coffeeShopDTO.setRegion(coffeeShopEntity.getRegion());
         OwnerGetResponse ownerDTO = new OwnerGetResponse();
         ownerDTO.setName(coffeeShopEntity.getOwner().getFullname());
         ownerDTO.setPhone(coffeeShopEntity.getOwner().getPhone());

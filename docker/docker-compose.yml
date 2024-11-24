@@ -20,8 +20,117 @@ services:
     volumes:
       - cache:/data
 
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.4
+    # container_name: zookeeper
+    hostname: zookeeper
+    ports:
+      - '32181:32181'
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 32181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - localstacknt
+
+  kafka:
+    image: confluentinc/cp-enterprise-kafka:7.5.4
+    # container_name: kafka
+    hostname: kafka
+    ports:
+      - '9094:9094'
+      - '29092:29092'
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:32181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9094
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,OUTSIDE://localhost:9094
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka:29092
+      CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:32181
+      CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
+      CONFLUENT_METRICS_ENABLE: 'true'
+      CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+    healthcheck:
+      test: [ "CMD", "kafka-topics", "--list", "--bootstrap-server", "kafka:29092" ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - zookeeper
+    restart: on-failure
+    networks:
+      - localstacknt
+
+  kafka-create-topics:
+    image: confluentinc/cp-kafka:7.5.3
+    depends_on:
+      kafka:
+        condition: service_healthy
+    hostname: kafka-create-topics
+    # container_name: kafka-create-topics
+    command: "bash -c 'echo Waiting for Kafka to be ready... && \
+                        cub kafka-ready -b kafka:29092 1 20 && \
+                        kafka-topics --create --topic coffee-shop-asia --if-not-exists --bootstrap-server kafka:29092 --partitions 10 --replication-factor 1 && \
+                        kafka-topics --create --topic coffee-shop-eu --if-not-exists --bootstrap-server kafka:29092 --partitions 10 --replication-factor 1 && \
+                        sleep infinity'"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: ignored
+    healthcheck:
+      test: [ "CMD", "kafka-topics", "--list", "--bootstrap-server", "kafka:29092" ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    restart: on-failure
+    networks:
+      - localstacknt
+
+  control-center:
+    image: confluentinc/cp-enterprise-control-center:7.5.3
+    container_name: control-center
+    restart: always
+    depends_on:
+      - kafka
+      - zookeeper
+    ports:
+      - '9021:9021'
+      - '9022:9022'
+    environment:
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: kafka:29092
+      CONTROL_CENTER_ZOOKEEPER_CONNECT: zookeeper:32181
+      CONTROL_CENTER_REPLICATION_FACTOR: 1
+      CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_REPLICATION: 1
+      CONTROL_CENTER_INTERNAL_TOPICS_REPLICATION: 1
+      CONTROL_CENTER_COMMAND_TOPIC_REPLICATION: 1
+      CONTROL_CENTER_METRICS_TOPIC_REPLICATION: 1
+      CONTROL_CENTER_STREAMS_NUM_STREAM_THREADS: 1
+      CONTROL_CENTER_CONNECT_CLUSTER: https://connect:8083
+      CONTROL_CENTER_KSQL_URL: http://ksql-server:8088
+      CONTROL_CENTER_KSQL_ADVERTISED_URL: http://localhost:8088
+      CONTROL_CENTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      CONTROL_CENTER_STREAMS_CONSUMER_REQUEST_TIMEOUT_MS: 960032
+      CONTROL_CENTER_STREAMS_SECURITY_PROTOCOL: PLAINTEXT
+      # HTTP and HTTPS to Control Center UI
+      CONTROL_CENTER_REST_LISTENERS: http://0.0.0.0:9021,https://0.0.0.0:9022
+      CONFLUENT_SUPPORT_METRICS_ENABLE: false
+    healthcheck:
+      test: curl --fail --silent http://control-center:9021 --output /dev/null || exit 1
+      start_period: 10s
+      interval: 10s
+      retries: 20
+    networks:
+      - localstacknt
+
 volumes:
   db:
     driver: local
   cache:
     driver: local
+
+networks:
+  localstacknt:
+    driver: bridge

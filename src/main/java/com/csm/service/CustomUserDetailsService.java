@@ -2,6 +2,7 @@ package com.csm.service;
 
 import com.csm.exception.BadRequestException;
 import com.csm.model.ResponseStatusEnum;
+import com.csm.model.UserRoleEnum;
 import com.csm.repository.UserRepository;
 import com.csm.repository.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,4 +31,14 @@ public class CustomUserDetailsService implements UserDetailsService {
         return (UserEntity) loadUserByUsername(username);
     }
 
+    public String getCurrentUsername() throws UsernameNotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
+    }
+
+    public void promoteUser(Long id) {
+        UserEntity user = userRepository.findById(id).orElseThrow(() -> new BadRequestException(ResponseStatusEnum.NOT_FOUND, "User not found"));
+        user.setRole(UserRoleEnum.ROLE_ADMIN);
+        userRepository.save(user);
+    }
 }

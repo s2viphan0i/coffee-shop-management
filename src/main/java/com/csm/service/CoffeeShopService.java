@@ -76,7 +76,7 @@ public class CoffeeShopService {
         return menuMapper.toMenuUpdateResponse(menuEntity);
     }
 
-    private CoffeeShopEntity getCoffeeShopById(Long id) {
+    public CoffeeShopEntity getCoffeeShopById(Long id) {
         Optional<CoffeeShopEntity> coffeeShopOptional = coffeeShopRepository.findById(id);
 
         return coffeeShopOptional.orElseThrow(() -> new BadRequestException(ResponseStatusEnum.NOT_FOUND, "Coffee shop"));

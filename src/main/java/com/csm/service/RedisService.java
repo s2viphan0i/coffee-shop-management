@@ -1,5 +1,6 @@
 package com.csm.service;
 
+import com.csm.model.ShopQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -8,13 +9,13 @@ import org.springframework.stereotype.Service;
 public class RedisService {
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<String, ShopQueue> redisTemplate;
 
-    public void saveQueueToRedis(String key, Person person) {
-        redisTemplate.opsForValue().set(key, person);
+    public void saveQueueToRedis(String queueKey, ShopQueue queues) {
+        redisTemplate.opsForValue().set(queueKey, queues);
     }
 
-    public Person getPersonFromRedis(String key) {
-        return (Person) redisTemplate.opsForValue().get(key);
+    public ShopQueue getQueueFromRedis(String queueId) {
+        return redisTemplate.opsForValue().get(queueId);
     }
 }

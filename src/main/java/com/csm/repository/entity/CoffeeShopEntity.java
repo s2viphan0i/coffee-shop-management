@@ -1,5 +1,6 @@
 package com.csm.repository.entity;
 
+import com.csm.model.RegionEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,7 +31,11 @@ public class CoffeeShopEntity extends AuditEntity {
     private Double longitude;
 
     @Column(nullable = false)
-    private Integer queues;
+    private Integer queue;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RegionEnum region;
 
     @ManyToOne
     @JoinColumn(name = "owner_id")

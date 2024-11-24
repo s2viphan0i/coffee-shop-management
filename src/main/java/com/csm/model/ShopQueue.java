@@ -4,11 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class ShopQueue {
-    List<ShopOrder> orders;
+public class ShopQueue implements Serializable {
+    private String queueId;
+    private List<ShopOrder> orders;
 }
