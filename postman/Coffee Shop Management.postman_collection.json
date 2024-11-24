@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"spencer.nguyentruong\",\r\n    \"password\": \"thispassword\",\r\n    \"phone\": \"0972366337\",\r\n    \"address\": \"136 H Street\"\r\n}",
+							"raw": "{\r\n    \"username\": \"ha.do\",\r\n    \"password\": \"thispassword\",\r\n    \"fullname\": \"Ha Do\",\r\n    \"phone\": \"0923477533\",\r\n    \"address\": \"136 Hokado Str\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -38,12 +38,33 @@
 				},
 				{
 					"name": "Login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"token\", jsonData.accessToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"spencer.nguyentruong\",\r\n    \"password\": \"thispassword\",\r\n    \"phone\": \"0972366337\",\r\n    \"address\": \"136 H Street\"\r\n}",
+							"raw": "{\r\n    \"username\": \"ha.do\",\r\n    \"password\": \"thispassword\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -51,14 +72,66 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/register",
+							"raw": "http://localhost:8080/auth",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"register"
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Promote User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"token\", jsonData.accessToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/admin/promote/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"admin",
+								"promote",
+								"2"
 							]
 						}
 					},
@@ -70,14 +143,14 @@
 			"name": "Coffee shop",
 			"item": [
 				{
-					"name": "Create",
+					"name": "Create shop",
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb2ZmZWUtc2hvcCIsInN1YiI6ImhhLmRvIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3MzIzODI0MDMsImV4cCI6MTczMjM4NjAwM30.RXS4tSWqbdNQxsxb-X651sir5MQmJZqL8TQMrDRSJYw",
+									"value": "{{token}}",
 									"type": "string"
 								}
 							]
@@ -86,7 +159,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Hado Coffee\",\r\n    \"address\": \"189 VanCourver\",\r\n    \"openingHours\": \"9:00AM - 10:00PM\",\r\n    \"latitude\": 21.00042, \r\n    \"longitude\": 105.693037\r\n}",
+							"raw": "{\r\n    \"name\": \"Ha do Coffee\",\r\n    \"address\": \"189 TrungHoa\",\r\n    \"openingHours\": \"9:00AM - 10:00PM\",\r\n    \"latitude\": 21.005624, \r\n    \"longitude\": 105.848236,\r\n    \"queue\": 2,\r\n    \"region\": \"ASIA\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -109,14 +182,14 @@
 					"response": []
 				},
 				{
-					"name": "Get",
+					"name": "Get shop detail",
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb2ZmZWUtc2hvcCIsInN1YiI6ImhhLmRvIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3MzI0MTczMzYsImV4cCI6MTczMjQyMDkzNn0.SkppzwN6Mp9KPhZfRuJv8Sg1R5_-ozHLx1_mi7DlHi4",
+									"value": "{{token}}",
 									"type": "string"
 								}
 							]
@@ -147,7 +220,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb2ZmZWUtc2hvcCIsInN1YiI6InNwZW5jZXIubmd1eWVudHJ1b25nIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3MzI0MjU0NjYsImV4cCI6MTczMjQyOTA2Nn0.D0mWmIR4HSDnEMooWM9nCHS3e8XcXU-aIs6PFDAF12c",
+									"value": "{{token}}",
 									"type": "string"
 								}
 							]
@@ -156,7 +229,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"items\": [\r\n    {\r\n      \"name\": \"Espresso\",\r\n      \"description\": \"Strong black coffee\",\r\n      \"price\": 2.5\r\n    },\r\n    {\r\n      \"name\": \"Cappuccino\",\r\n      \"description\": \"Coffee with steamed milk\",\r\n      \"price\": 3.0\r\n    }\r\n  ]\r\n}",
+							"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"name\": \"Espresso\",\r\n            \"description\": \"Strong black coffee\",\r\n            \"price\": 2.5\r\n        },\r\n        {\r\n            \"name\": \"Cappuccino\",\r\n            \"description\": \"Coffee with steamed milk\",\r\n            \"price\": 3.0\r\n        },\r\n        {\r\n            \"name\": \"Cafe muoi\",\r\n            \"description\": \"Coffee with salt\",\r\n            \"price\": 3.5\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -188,7 +261,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb2ZmZWUtc2hvcCIsInN1YiI6InNwZW5jZXIubmd1eWVudHJ1b25nIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3MzI0MjU0NjYsImV4cCI6MTczMjQyOTA2Nn0.D0mWmIR4HSDnEMooWM9nCHS3e8XcXU-aIs6PFDAF12c",
+									"value": "{{token}}",
 									"type": "string"
 								}
 							]
@@ -196,14 +269,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/admin/coffee-shops/1/menu",
+							"raw": "http://localhost:8080/user/coffee-shops/1/menu",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"admin",
+								"user",
 								"coffee-shops",
 								"1",
 								"menu"
@@ -211,8 +284,128 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get queues",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/coffee-shops/1/queue",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"coffee-shops",
+								"1",
+								"queue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Place order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"order\": [\r\n        {\r\n            \"name\": \"Cafe muoi\",\r\n            \"description\": \"Coffee with salt\",\r\n            \"price\": 3.5\r\n        }\r\n    ],\r\n    \"note\": \"No sugar, no ice\",\r\n    \"region\": \"ASIA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/coffee-shops/1/queue/1-1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"coffee-shops",
+								"1",
+								"queue",
+								"1-1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get recommendation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"xMin\": 21.002863, \r\n    \"yMin\": 105.841495, \r\n    \"xMax\": 21.008557, \r\n    \"yMax\": 105.851327\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/coffee-shops/recommend",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"coffee-shops",
+								"recommend"
+							]
+						}
+					},
+					"response": []
 				}
 			]
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": ""
 		}
 	]
 }

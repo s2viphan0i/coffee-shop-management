@@ -1,6 +1,8 @@
 package com.csm.controller;
 
 import com.csm.factory.ResponseFactory;
+import com.csm.job.ScheduledJobs;
+import com.csm.model.QuadTree;
 import com.csm.model.request.CoffeeShopCreateRequest;
 import com.csm.model.request.MenuCreateRequest;
 import com.csm.model.response.CoffeeShopCreateResponse;
@@ -12,6 +14,9 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("")
@@ -41,5 +46,11 @@ public class CoffeeShopController {
     public ResponseEntity<?> getShopMenu(@PathVariable Long shopId) {
         MenuGetResponse response = coffeeShopService.getShopMenu(shopId);
         return ResponseFactory.success(response, MenuGetResponse.class);
+    }
+
+    @PostMapping(value = "/user/coffee-shops/recommend", produces = "application/json")
+    public ResponseEntity<?> getShopMenu(@RequestBody QuadTree.BoundingBox range) {
+        List<QuadTree.Point> result = ScheduledJobs.world.query(range, new ArrayList<>());
+        return ResponseFactory.success(result, List.class);
     }
 }

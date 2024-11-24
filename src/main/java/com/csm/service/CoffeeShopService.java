@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CoffeeShopService {
@@ -86,5 +87,11 @@ public class CoffeeShopService {
         Optional<MenuEntity> menuEntityOptional = menuRepository.findByShopId(shopId);
         MenuEntity menuEntity = menuEntityOptional.orElseGet(MenuEntity::new);
         return menuMapper.toDTO(menuEntity);
+    }
+
+    public List<CoffeeShopGetResponse> getAllCoffeeShop() {
+        List<CoffeeShopEntity> coffeeShops = coffeeShopRepository.findAll();
+
+        return coffeeShops.stream().map(coffeeShopMapper::toCoffeeShopGetResponse).collect(Collectors.toList());
     }
 }
